@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   UploadZone, WaveformDisplay, Controls, 
@@ -7,7 +7,7 @@ import {
 import { useAudio } from './hooks/useAudio';
 import { useWaveform } from './hooks/useWaveform';
 import { Project } from './types';
-import { Sparkles, Music, Github } from 'lucide-react';
+import { Music } from 'lucide-react';
 
 function App() {
   const {
@@ -29,35 +29,30 @@ function App() {
     handleTimeUpdate,
     handleEnded,
     changeVolume,
-    setCurrentTime
   } = useAudio();
 
   const {
     style,
     updateStyle,
     draw,
-    canvasRef,
     setIsPlaying
   } = useWaveform();
 
-  const [projects, setProjects] = useState<Project[]>(() => {
+  const [projects, setProjects] = React.useState<Project[]>(() => {
     const saved = localStorage.getItem('waveform_projects');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Update isPlaying state
   useEffect(() => {
     setIsPlaying(isPlaying);
   }, [isPlaying, setIsPlaying]);
 
-  // Redraw when waveform data changes
   useEffect(() => {
     if (waveformData && waveformData.length > 0) {
       draw(waveformData);
     }
   }, [waveformData, style, draw]);
 
-  // Save projects to localStorage
   useEffect(() => {
     localStorage.setItem('waveform_projects', JSON.stringify(projects));
   }, [projects]);
@@ -86,7 +81,6 @@ function App() {
   };
 
   const handleLoadProject = (project: Project) => {
-    // In real implementation, we would load the audio file from the project
     console.log('Loading project:', project);
   };
 
@@ -103,7 +97,6 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-800">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
-        {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,7 +107,7 @@ function App() {
               <Music className="w-6 h-6 text-dark-900" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gradient">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-accent-orange via-accent-yellow to-accent-blue bg-clip-text text-transparent">
                 Waveform Studio
               </h1>
               <p className="text-xs text-white/30">Tạo sóng nhạc đẹp mắt</p>
@@ -130,20 +123,10 @@ function App() {
               onRenameProject={handleRenameProject}
               currentProjectName={audioFile?.name}
             />
-            <a 
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-full glass glass-hover"
-            >
-              <Github className="w-5 h-5 text-white/40" />
-            </a>
           </div>
         </motion.header>
 
-        {/* Main content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
-          {/* Left column - Upload & Waveform */}
           <div className="lg:col-span-3 space-y-4">
             <UploadZone 
               onFileUpload={loadFile} 
@@ -159,7 +142,6 @@ function App() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="space-y-3"
                 >
-                  {/* Hidden audio element */}
                   <audio
                     ref={audioRef}
                     onTimeUpdate={handleTimeUpdate}
@@ -167,8 +149,7 @@ function App() {
                     className="hidden"
                   />
 
-                  {/* Waveform display */}
-                  <div className="rounded-2xl overflow-hidden glass">
+                  <div className="rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10">
                     <div className="h-72 relative">
                       <WaveformDisplay
                         data={waveformData}
@@ -190,7 +171,6 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Controls */}
                   <Controls
                     isPlaying={isPlaying}
                     onPlay={play}
@@ -207,14 +187,13 @@ function App() {
             </AnimatePresence>
           </div>
 
-          {/* Right column - Customization & Export */}
           <div className="space-y-4">
             <AnimatePresence>
               {audioFile && waveformData.length > 0 && (
                 <>
                   <CustomizationPanel
                     style={style.type}
-                    setStyle={(s) => updateStyle({ type: s })}
+                    setStyle={(s: any) => updateStyle({ type: s })}
                     color={style.color}
                     setColor={(c) => updateStyle({ color: c })}
                     backgroundColor={style.backgroundColor}
@@ -234,15 +213,9 @@ function App() {
                   />
 
                   <ExportPanel
-                    waveformData={waveformData}
                     audioFile={audioFile}
                     style={style.type}
                     color={style.color}
-                    backgroundColor={style.backgroundColor}
-                    thickness={style.thickness}
-                    sensitivity={style.sensitivity}
-                    glow={style.glow}
-                    glowIntensity={style.glowIntensity}
                     duration={duration}
                   />
                 </>
@@ -251,18 +224,13 @@ function App() {
           </div>
         </div>
 
-        {/* Footer */}
         <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="mt-8 text-center text-xs text-white/20"
         >
-          <p>
-            Made with ❤️ using React, TypeScript, Tailwind CSS & Framer Motion
-          </p>
-          <p className="mt-1">
-            🎵 Hỗ trợ MP3, WAV, M4A, OGG, FLAC, MP4, MOV, MKV, AVI
-          </p>
+          <p>Made with ❤️ using React, TypeScript, Tailwind CSS & Framer Motion</p>
+          <p className="mt-1">🎵 Hỗ trợ MP3, WAV, M4A, OGG, FLAC, MP4, MOV, MKV, AVI</p>
         </motion.footer>
       </div>
     </div>
