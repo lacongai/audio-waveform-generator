@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { WaveformGenerator, WaveformStyleType } from '../utils/waveformGenerator';
+import { WaveformGenerator } from '../utils/waveformGenerator';
+import { WaveformStyleType } from '../types';
 import { Music } from 'lucide-react';
 
 interface WaveformDisplayProps {
@@ -40,7 +41,6 @@ export const WaveformDisplay: React.FC<WaveformDisplayProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
-  const progressRef = useRef(1);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -60,11 +60,9 @@ export const WaveformDisplay: React.FC<WaveformDisplayProps> = ({
         ? Math.min(1, currentTime / duration)
         : 1;
 
-      // Background
       ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw waveform
       WaveformGenerator.draw({
         ctx,
         width: canvas.width,

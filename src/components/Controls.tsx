@@ -54,9 +54,8 @@ export const Controls: React.FC<ControlsProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col gap-3 p-4 rounded-xl glass"
+      className="flex flex-col gap-3 p-4 rounded-xl bg-white/5 backdrop-blur-sm"
     >
-      {/* Progress bar */}
       <div className="flex items-center gap-3">
         <span className="text-xs text-white/40 font-mono min-w-[40px]">
           {formatTime(currentTime)}
@@ -68,85 +67,41 @@ export const Controls: React.FC<ControlsProps> = ({
           step="0.001"
           value={duration > 0 ? currentTime / duration : 0}
           onChange={handleSeek}
-          className="flex-1"
+          className="flex-1 h-1 rounded-full bg-white/20 appearance-none 
+            [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 
+            [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full 
+            [&::-webkit-slider-thumb]:bg-accent-orange [&::-webkit-slider-thumb]:cursor-pointer"
         />
         <span className="text-xs text-white/40 font-mono min-w-[40px] text-right">
           {formatTime(duration)}
         </span>
       </div>
 
-      {/* Controls row */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onStop}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
-          >
+          <button onClick={onStop} className="p-2 rounded-full hover:bg-white/10 transition-colors">
             <Square className="w-4 h-4 text-white/60" />
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onSeek(Math.max(0, currentTime - 5))}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
-          >
+          </button>
+          <button onClick={() => onSeek(Math.max(0, currentTime - 5))} className="p-2 rounded-full hover:bg-white/10 transition-colors">
             <SkipBack className="w-4 h-4 text-white/60" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={isPlaying ? onPause : onPlay}
-            className="p-3 rounded-full bg-gradient-to-r from-accent-orange to-accent-yellow text-dark-900 shadow-lg shadow-accent-orange/30"
-          >
-            {isPlaying ? (
-              <Pause className="w-5 h-5" />
-            ) : (
-              <Play className="w-5 h-5 ml-0.5" />
-            )}
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onSeek(Math.min(duration, currentTime + 5))}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
-          >
+          </button>
+          <button onClick={isPlaying ? onPause : onPlay} className="p-3 rounded-full bg-gradient-to-r from-accent-orange to-accent-yellow text-dark-900 shadow-lg shadow-accent-orange/30">
+            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+          </button>
+          <button onClick={() => onSeek(Math.min(duration, currentTime + 5))} className="p-2 rounded-full hover:bg-white/10 transition-colors">
             <SkipForward className="w-4 h-4 text-white/60" />
-          </motion.button>
+          </button>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <button
-              onClick={toggleMute}
-              className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
-            >
-              {volume === 0 ? (
-                <VolumeX className="w-4 h-4 text-white/40" />
-              ) : (
-                <Volume2 className="w-4 h-4 text-white/60" />
-              )}
+            <button onClick={toggleMute} className="p-1.5 rounded-full hover:bg-white/10 transition-colors">
+              {volume === 0 ? <VolumeX className="w-4 h-4 text-white/40" /> : <Volume2 className="w-4 h-4 text-white/60" />}
             </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={volume}
-              onChange={handleVolume}
-              className="w-16"
-            />
+            <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolume} className="w-16" />
           </div>
-
           {onFullscreen && (
-            <button
-              onClick={onFullscreen}
-              className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
-            >
+            <button onClick={onFullscreen} className="p-1.5 rounded-full hover:bg-white/10 transition-colors">
               <Maximize2 className="w-4 h-4 text-white/40" />
             </button>
           )}
