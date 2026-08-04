@@ -26,28 +26,21 @@ export function useAudio() {
   const loadFile = useCallback(async (file: File) => {
     setIsProcessing(true);
     setError(null);
-    
     try {
       const processor = processorRef.current;
       if (!processor) throw new Error('Audio processor not initialized');
-
       const result = await processor.processFile(file);
       const url = URL.createObjectURL(file);
-
       setAudioFile(file);
       setAudioUrl(url);
       setWaveformData(result.waveform);
       setDuration(result.buffer.duration);
-      
       if (audioRef.current) {
         audioRef.current.src = url;
         audioRef.current.load();
       }
-
-      return result;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to process audio');
-      throw err;
     } finally {
       setIsProcessing(false);
     }
@@ -120,6 +113,5 @@ export function useAudio() {
     handleTimeUpdate,
     handleEnded,
     changeVolume,
-    setCurrentTime,
   };
 }

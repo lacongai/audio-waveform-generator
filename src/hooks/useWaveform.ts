@@ -3,13 +3,13 @@ import { WaveformStyleType, WaveformStyle } from '../types';
 import { WaveformGenerator } from '../utils/waveformGenerator';
 
 const defaultStyle: WaveformStyle = {
-  type: 'circle',
+  type: 'line',
   color: '#ffd200',
   backgroundColor: '#0f0c29',
   thickness: 2,
   sensitivity: 1,
-  glow: true,
-  glowIntensity: 1.5,
+  glow: false,
+  glowIntensity: 1,
   particles: false,
   particleCount: 100,
   opacity: 1,
@@ -17,7 +17,6 @@ const defaultStyle: WaveformStyle = {
 
 export function useWaveform() {
   const [style, setStyle] = useState<WaveformStyle>(defaultStyle);
-  const [isPlaying, setIsPlaying] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const updateStyle = useCallback((updates: Partial<WaveformStyle>) => {
@@ -27,7 +26,6 @@ export function useWaveform() {
   const draw = useCallback((data: Float32Array, progress: number = 1) => {
     const canvas = canvasRef.current;
     if (!canvas || !data || data.length === 0) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -40,23 +38,17 @@ export function useWaveform() {
     ctx.fillStyle = style.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    WaveformGenerator.draw({
+    WaveformGenerator.draw(
       ctx,
-      width: canvas.width,
-      height: canvas.height,
+      canvas.width,
+      canvas.height,
       data,
-      style: style.type,
-      color: style.color,
-      thickness: style.thickness,
-      sensitivity: style.sensitivity,
-      glow: style.glow,
-      glowIntensity: style.glowIntensity,
-      opacity: style.opacity,
-      progress,
-      particles: style.particles,
-      particleCount: style.particleCount,
-    });
-
+      style.type,
+      style.color,
+      style.thickness,
+      style.sensitivity,
+      progress
+    );
   }, [style]);
 
   return {
@@ -64,7 +56,5 @@ export function useWaveform() {
     updateStyle,
     draw,
     canvasRef,
-    isPlaying,
-    setIsPlaying,
   };
 }
