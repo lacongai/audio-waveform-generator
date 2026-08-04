@@ -1,5 +1,3 @@
-import { AudioProcessorResult } from '../types';
-
 export class AudioProcessor {
   private audioContext: AudioContext | null = null;
   private audioBuffer: AudioBuffer | null = null;
@@ -8,7 +6,7 @@ export class AudioProcessor {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
   }
 
-  async processFile(file: File): Promise<AudioProcessorResult> {
+  async processFile(file: File): Promise<{ buffer: AudioBuffer; waveform: Float32Array }> {
     const arrayBuffer = await file.arrayBuffer();
     this.audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer);
     
@@ -16,17 +14,14 @@ export class AudioProcessor {
     
     return {
       buffer: this.audioBuffer,
-      waveform,
-      duration: this.audioBuffer.duration,
-      sampleRate: this.audioBuffer.sampleRate,
-      channels: this.audioBuffer.numberOfChannels
+      waveform
     };
   }
 
   private extractWaveform(audioBuffer: AudioBuffer): Float32Array {
     const channelData = audioBuffer.getChannelData(0);
     const samples = channelData.length;
-    const resolution = 2000;
+    const resolution = 1000;
     const step = Math.floor(samples / resolution);
     const waveform = new Float32Array(resolution);
     
@@ -45,10 +40,6 @@ export class AudioProcessor {
 
   getDuration(): number {
     return this.audioBuffer?.duration || 0;
-  }
-
-  getBuffer(): AudioBuffer | null {
-    return this.audioBuffer;
   }
 
   destroy() {
