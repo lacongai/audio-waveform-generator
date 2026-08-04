@@ -27,6 +27,9 @@ export default {
           purple: '#764ba2',
         }
       },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [],

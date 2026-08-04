@@ -1,10 +1,7 @@
 services:
   - type: web
     name: audio-waveform-generator
-    runtime: node
-    repo: https://github.com/lacongai/audio-waveform-generator
-    branch: main
-    plan: free
+    runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     routes:
