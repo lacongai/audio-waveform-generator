@@ -6,12 +6,18 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
-    allowedHosts: 'all' // Cho phép tất cả host
+    allowedHosts: [
+      'audio-waveform-generator.onrender.com',
+      '.onrender.com'
+    ]
   },
   preview: {
-    port: 3000,
+    port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     host: true,
-    allowedHosts: 'all'
+    allowedHosts: [
+      'audio-waveform-generator.onrender.com',
+      '.onrender.com'
+    ]
   },
   build: {
     outDir: 'dist',
