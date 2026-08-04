@@ -37,7 +37,7 @@ export function useAudio() {
       setAudioFile(file);
       setAudioUrl(url);
       setWaveformData(result.waveform);
-      setDuration(result.duration);
+      setDuration(result.buffer.duration);
       
       if (audioRef.current) {
         audioRef.current.src = url;
