@@ -1,6 +1,5 @@
 export class AudioProcessor {
   private audioContext: AudioContext | null = null;
-  private audioBuffer: AudioBuffer | null = null;
 
   constructor() {
     this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -8,14 +7,9 @@ export class AudioProcessor {
 
   async processFile(file: File): Promise<{ buffer: AudioBuffer; waveform: Float32Array }> {
     const arrayBuffer = await file.arrayBuffer();
-    this.audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer);
-    
-    const waveform = this.extractWaveform(this.audioBuffer);
-    
-    return {
-      buffer: this.audioBuffer,
-      waveform
-    };
+    const audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer);
+    const waveform = this.extractWaveform(audioBuffer);
+    return { buffer: audioBuffer, waveform };
   }
 
   private extractWaveform(audioBuffer: AudioBuffer): Float32Array {
@@ -34,12 +28,7 @@ export class AudioProcessor {
       }
       waveform[i] = Math.min(1, sum / (end - start) * 2);
     }
-    
     return waveform;
-  }
-
-  getDuration(): number {
-    return this.audioBuffer?.duration || 0;
   }
 
   destroy() {
