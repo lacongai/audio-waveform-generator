@@ -1,17 +1,13 @@
 services:
   - type: web
     name: audio-waveform-generator
-    runtime: static
+    runtime: node
+    repo: https://github.com/lacongai/audio-waveform-generator
+    branch: main
+    plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
-    envVars:
-      - key: NODE_VERSION
-        value: 18.17.0
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: public, max-age=31536000, immutable
