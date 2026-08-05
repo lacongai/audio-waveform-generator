@@ -7,16 +7,18 @@ export default defineConfig({
     port: 3000,
     host: true,
     allowedHosts: [
-      'audio-waveform-generator.onrender.com',
-      '.onrender.com'
+        'audio-waveform-generator.onrender.com',
+        '.onrender.com',
+        '.vercel.app'
     ]
   },
   preview: {
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     host: true,
     allowedHosts: [
-      'audio-waveform-generator.onrender.com',
-      '.onrender.com'
+        'audio-waveform-generator.onrender.com',
+        '.onrender.com',
+        '.vercel.app'
     ]
   },
   build: {
