@@ -7,12 +7,7 @@ const defaultStyle: WaveformStyle = {
   color: '#ffd200',
   backgroundColor: '#0f0c29',
   thickness: 2,
-  sensitivity: 1,
-  glow: false,
-  glowIntensity: 1,
-  particles: false,
-  particleCount: 100,
-  opacity: 1,
+  sensitivity: 1.2,
 };
 
 export function useWaveform() {
